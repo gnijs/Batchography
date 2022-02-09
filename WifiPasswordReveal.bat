@@ -45,6 +45,9 @@ setlocal enabledelayedexpansion
     FOR /F "usebackq tokens=2 delims=:" %%a in (
         `netsh wlan show profile name^="%~1" key^=clear ^| findstr /C:"Key Content"`) DO (
         set result=%%a
+        REM The following is needed to escape '&' in the password field!
+        set result=!result:^&=^^^&!
+        REM Another solution is to quote the result, however then there are quotes in the output -- set result="!result:~1!"
         set result=!result:~1!
     )
     (
